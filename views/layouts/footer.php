@@ -21,6 +21,8 @@
     <script type="text/javascript" src="/template/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/template/js/lightbox.min.js"></script>
     <script type="text/javascript" src="/template/js/wow.min.js"></script>
-    <script type="text/javascript" src="/template/js/main.js"></script>   
+    <script type="text/javascript" src="/template/js/main.js"></script>
+
+    <script type="text/javascript" src="/template/js/add.comment.js"></script>   
 </body>
 </html>

@@ -2,9 +2,11 @@
 
 function displayEntries()
 {
+	$categories = getCategoriesList();
 	$data = getPaginationData();
+	$data['page'] = true;
 	$res = getAllRecords($data['start'], $data['perpage']);
-	displayTheTemplate('blogging', $res, $data);
+	displayTheTemplateNewParameter('blogging', $res, $data, $categories, array());
 }
 
 function outputOneNews()
@@ -28,4 +30,20 @@ function login()
 {
 	$res = singleUserRegistration();
 	displayTheTemplate('login', $res, array());
+}
+
+function addForm()
+{
+	$res = AddNews();
+	displayTheTemplate('append', $res, array());
+}
+
+function showNewsByCategory()
+{
+	$categoryID = isset($_GET['categoryID']) ? $_GET['categoryID'] : '';
+	$categories = getCategoriesList();
+	$data = getPaginationDataNewParameter($categoryID);
+	$data['category'] = true;
+	$res = getNewsUnderCategories($data['start'], $data['perpage'], $categoryID);
+	displayTheTemplateNewParameter('blogging', $res, $data, $categories, $categoryID);
 }

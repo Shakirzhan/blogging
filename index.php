@@ -38,6 +38,12 @@ switch ($uri) {
 				session_destroy();
 				header("location: ../");
 				break;
+			case 'append':
+				addForm();
+				break;
+			case 'category':
+				showNewsByCategory();
+				break;
 			
 			default:
 				# code...

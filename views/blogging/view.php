@@ -1,21 +1,7 @@
 <?php require_once(ROOT.'/views/layouts/header.php'); ?>
 
-    <section id="page-breadcrumb">
-        <div class="vertical-center sun">
-             <div class="container">
-                <div class="row">
-                    <div class="action">
-                        <div class="col-sm-12">
-                            <h1 class="title">Blog</h1>
-                            <p>Blog with right sidebar</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!--/#page-breadcrumb-->
-
+    <?php require_once(ROOT.'/views/layouts/heading.php'); ?>   
+    
     <section id="blog" class="padding-top">
         <div class="container">
             <div class="row">
@@ -48,21 +34,7 @@
                         <?php endforeach; ?>
                     </div>
                     
-                    <div class="blog-pagination">
-                        <ul class="pagination">
-                            <?php if ($data['curpage'] != $data['startpage']) { ?>
-                                <li class="startpage"><a href="?action=page&amp;page=<?php echo $data['startpage'] ?>">left</a></li>
-                            <?php } ?>
-                            <?php if ($data['curpage'] >= 2) { ?>
-                                <li><a href="?action=page&amp;page=<?php echo $data['previouspage'] ?>"><?php echo $data['previouspage'] ?></a></li>
-                            <?php } ?>
-                            <li class="active"><a href="?action=page&amp;page=<?php echo $data['curpage'] ?>"><?php echo $data['curpage'] ?></a></li>
-                            <?php if ($data['curpage'] != $data['endpage']) { ?>
-                                <li><a href="?action=page&amp;page=<?php echo $data['nextpage'] ?>"><?php echo $data['nextpage'] ?></a></li>
-                                <li class="endpage"><a href="?action=page&amp;page=<?php echo $data['endpage'] ?>">right</a></li>
-                            <?php } ?>
-                        </ul>
-                    </div>
+                    <?php require_once(ROOT.'/views/layouts/pagination.php'); ?>
                  </div>
                 <div class="col-md-3 col-sm-5">
                     <div class="sidebar blog-sidebar">
@@ -70,6 +42,7 @@
                         <div class="sidebar-item categories">
                             <h3>Categories</h3>
                             <ul class="nav navbar-stacked">
+                                <!--
                                 <li><a href="#">Lorem ipsum<span class="pull-right">(1)</span></a></li>
                                 <li class="active"><a href="#">Dolor sit amet<span class="pull-right">(8)</span></a></li>
                                 <li><a href="#">Adipisicing elit<span class="pull-right">(4)</span></a></li>
@@ -78,6 +51,10 @@
                                 <li><a href="#">Mockup<span class="pull-right">(4)</span></a></li>
                                 <li><a href="#">Ut enim ad minim <span class="pull-right">(2)</span></a></li>
                                 <li><a href="#">Veniam, quis nostrud <span class="pull-right">(8)</span></a></li>
+                                -->
+                                <?php foreach ($categories as $categoryItem): ?>
+                                    <li><a href="?action=category&amp;categoryID=<?php echo $categoryItem['id'];?>"><?php echo $categoryItem['name'];?><span class="pull-right">(10)</span></a></li>
+                                <?php endforeach; ?>
                             </ul>
                         </div>
                         

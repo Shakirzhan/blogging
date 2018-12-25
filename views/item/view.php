@@ -1,19 +1,6 @@
 <?php require_once(ROOT.'/views/layouts/header.php'); ?>    
-    <section id="page-breadcrumb">
-        <div class="vertical-center sun">
-            <div class="container">
-                <div class="row">
-                    <div class="action">
-                        <div class="col-sm-12">
-                            <h1 class="title">Blog Details</h1>
-                            <p>Blog with right sidebar</p>
-                        </div>                                                                                
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!--/#page-breadcrumb-->
+   
+    <?php require_once(ROOT.'/views/layouts/heading.php'); ?>
 
     <section id="blog-details" class="padding-top">
         <div class="container">
@@ -59,57 +46,30 @@
                                         </div>
                                     </div>
                                     <div class="response-area">
-                                    <h2 class="bold">Comments</h2>
-                                    <ul class="media-list">
-                                        <li class="media">
-                                            <div class="post-comment">
-                                                <a class="pull-left" href="#">
-                                                    <img class="media-object" src="/template/images/blogdetails/2.png" alt="">
-                                                </a>
-                                                <div class="media-body">
-                                                    <span><i class="fa fa-user"></i>Posted by <a href="#">Endure</a></span>
-                                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliq Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.</p>
-                                                    <ul class="nav navbar-nav post-nav">
-                                                        <li><a href="#"><i class="fa fa-clock-o"></i>February 11,2014</a></li>
-                                                        <li><a href="#"><i class="fa fa-reply"></i>Reply</a></li>
-                                                    </ul>
+                                        <h2 class="bold">Comments</h2>
+                                        <?php if (isset($_SESSION['session_username'])): ?>
+                                            <form id="main-contact-form" name="comment_form" method="post">
+                                                <input type="hidden" name="itemID" id="itemID" value="<?=$res['id'] ?>">
+                                                <div class="form-group">
+                                                    <input type="email" name="email" id="comment_email" class="form-control" required="required" placeholder="Email">
                                                 </div>
-                                            </div>
-                                            <div class="parrent">
-                                                <ul class="media-list">
-                                                    <li class="post-comment reply">
-                                                        <a class="pull-left" href="#">
-                                                            <img class="media-object" src="/template/images/blogdetails/3.png" alt="">
-                                                        </a>
-                                                        <div class="media-body">
-                                                            <span><i class="fa fa-user"></i>Posted by <a href="#">Endure</a></span>
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut </p>
-                                                            <ul class="nav navbar-nav post-nav">
-                                                                <li><a href="#"><i class="fa fa-clock-o"></i>February 11,2014</a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                        <li class="media">
-                                            <div class="post-comment">
-                                                <a class="pull-left" href="#">
-                                                    <img class="media-object" src="/template/images/blogdetails/4.png" alt="">
-                                                </a>
-                                                <div class="media-body">
-                                                    <span><i class="fa fa-user"></i>Posted by <a href="#">Endure</a></span>
-                                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliq Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.</p>
-                                                    <ul class="nav navbar-nav post-nav">
-                                                        <li><a href="#"><i class="fa fa-clock-o"></i>February 11,2014</a></li>
-                                                        <li><a href="#"><i class="fa fa-reply"></i>Reply</a></li>
-                                                    </ul>
+                                                <div class="form-group">
+                                                    <textarea name="comment_content" id="message" required="required" class="form-control" rows="8" placeholder="Your text here"></textarea>
+                                                </div>                        
+                                                <div class="form-group">
+                                                    <input type="hidden" name="comment_id" id="comment_id" value="0" />
+                                                    <input type="submit" name="submit" class="btn btn-submit" value="Submit">
                                                 </div>
-                                            </div>
-                                        </li>
-                                        
-                                    </ul>                   
-                                </div><!--/Response-area-->
+                                            </form>
+                                        <?php else: ?>
+                                            <input type="hidden" name="itemID" id="itemID" value="<?=$res['id'] ?>">
+                                            <div class="alert alert-danger" role="alert">Незарегистрированные пользователи не могут оставлять комментарии!</div>
+                                        <?php endif; ?>
+                                        <span id="comment_message"></span>
+                                        <ul class="media-list">
+                                            <li class="media" id="display_comment"></li>
+                                        </ul>         
+                                    </div><!--/Response-area-->
                                 </div>
                             </div>
                         </div>

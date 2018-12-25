@@ -1893,7 +1893,7 @@ span.stButton_gradient,
 
 .post-comment .pull-left img{
   margin-right: 60px;
-  border-left: 3px solid #0884d5;
+  /** border-left: 3px solid #0884d5; */
 }
 
 .post-comment .media-body{
