@@ -10,7 +10,15 @@
                          <div class="col-md-12 col-sm-12">
                             <div class="single-blog blog-details two-column">
                                 <div class="post-thumb">
-                                    <a href="#"><img src="<?=$res['picture'] ?>" class="img-responsive" alt=""></a>
+                                    <a href="#">
+                                        <img src="<?php 
+                                                    if (!empty($res['picture'])) {
+                                                        echo $res['picture'];
+                                                    } else {
+                                                        echo '/template/images/blog/9.jpg';
+                                                    }
+                                                 ?>" class="img-responsive" alt="">
+                                    </a>
                                     <div class="post-overlay">
                                         <span class="uppercase"><a href="#">14 <br><small>Feb</small></a></span>
                                     </div>
@@ -80,6 +88,7 @@
                         <div class="sidebar-item categories">
                             <h3>Categories</h3>
                             <ul class="nav navbar-stacked">
+                                <!--
                                 <li><a href="#">Lorem ipsum<span class="pull-right">(1)</span></a></li>
                                 <li class="active"><a href="#">Dolor sit amet<span class="pull-right">(8)</span></a></li>
                                 <li><a href="#">Adipisicing elit<span class="pull-right">(4)</span></a></li>
@@ -88,6 +97,8 @@
                                 <li><a href="#">Mockup<span class="pull-right">(4)</span></a></li>
                                 <li><a href="#">Ut enim ad minim <span class="pull-right">(2)</span></a></li>
                                 <li><a href="#">Veniam, quis nostrud <span class="pull-right">(8)</span></a></li>
+                                -->
+                                <?php require_once(ROOT.'/views/layouts/categories.php');?>
                             </ul>
                         </div>
                     </div>

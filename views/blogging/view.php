@@ -11,7 +11,16 @@
                             <div class="col-sm-12 col-md-12">
                                 <div class="single-blog single-column">
                                     <div class="post-thumb">
-                                        <a href="#"><img src="<?=$item->picture ?>" class="img-responsive" alt=""></a>
+                                        <a href="#">
+                                            <img src="<?php  
+                                                    if (!empty($item->picture)) {
+                                                        echo $item->picture;
+                                                    } else {
+                                                        echo '/template/images/blog/9.jpg';
+                                                    }
+                                                    ?>" 
+                                                 class="img-responsive" 
+                                                 alt=""></a>
                                         <div class="post-overlay">
                                            <span class="uppercase"><a href="#">14 <br><small>Feb</small></a></span>
                                        </div>
@@ -52,9 +61,7 @@
                                 <li><a href="#">Ut enim ad minim <span class="pull-right">(2)</span></a></li>
                                 <li><a href="#">Veniam, quis nostrud <span class="pull-right">(8)</span></a></li>
                                 -->
-                                <?php foreach ($categories as $categoryItem): ?>
-                                    <li><a href="?action=category&amp;categoryID=<?php echo $categoryItem['id'];?>"><?php echo $categoryItem['name'];?><span class="pull-right">(10)</span></a></li>
-                                <?php endforeach; ?>
+                                <?php require_once(ROOT.'/views/layouts/categories.php');?>   
                             </ul>
                         </div>
                         

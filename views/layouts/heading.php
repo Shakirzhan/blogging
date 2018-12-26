@@ -7,6 +7,9 @@
                         <?php if (isset($_SESSION['session_username'])): ?>
                             <h1 class="title" style="font-family: Arial;">Добро пожаловать, <span> <?=$_SESSION['session_username']; ?> </span>!</h1>
                             <p><a href="?action=logout" class="color-red">Выйти</a> из системы...</p>
+                            <?php if (!(substr($_SERVER['REQUEST_URI'], 1) == '?action=append')): ?>
+                                <p style="margin-top: 20px;"><a href="?action=append" class="color-red">Добавить новость</a></p>
+                            <?php endif; ?>
                         <?php else: ?>
                             <h1 class="title">Blog</h1>
                             <p>Blog with right sidebar</p>

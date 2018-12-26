@@ -17,7 +17,8 @@ function outputOneNews()
 		$item = 1;	
 	}
 	$res = getOneNews($item);
-	displayTheTemplate('item', $res, array());
+	$categories = getCategoriesList();
+	displayTheTemplate('item', $res, $categories);
 }
 
 function registration()
@@ -34,8 +35,10 @@ function login()
 
 function addForm()
 {
+	$categories = getCategoriesList();
+	$res = array();
 	$res = AddNews();
-	displayTheTemplate('append', $res, array());
+	displayTheTemplate('append', $res, $categories);
 }
 
 function showNewsByCategory()

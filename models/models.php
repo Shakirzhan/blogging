@@ -92,6 +92,7 @@ function AddNews()
 			$caption = $_POST['caption'];
 			$description = $_POST['description'];
 			$date = $_POST['date'];
+			$categoryID = $_POST['categories'];
 
 			if (!empty($_FILES['picture']['name'])) {
 				$path = 'img/';
@@ -105,20 +106,20 @@ function AddNews()
 	  		$_FILES['picture']['name'] = date('d.m.Y').'.'.time().'.'.$ext;
 	  		
 	  		if (!in_array($_FILES['picture']['type'], $types)) {
-	  			return '<div class="alert alert-danger" role="alert">Запрещённый тип файла.</div>';
+	  			return array('mes' => 'Запрещённый тип файла.', 'active' => 'false');
 	  		}
 	  		
 	  		if ($_FILES['picture']['size'] > $size) {
-	  			return '<div class="alert alert-danger" role="alert">Слишком большой размер файла.</div>';
+	  			return array('mes' => 'Слишком большой размер файла.', 'active' => 'false');
 	  		}
 	  		
 	 			if (!@copy($_FILES['picture']['tmp_name'], $path . $_FILES['picture']['name'])) {
-	  			return '<div class="alert alert-danger" role="alert">Что-то пошло не так</div>';
+	  			return array('mes' => 'Что-то пошло не так', 'active' => 'false');
 	  		} else {
-	 				$mes = '<div class="alert alert-success" role="alert">Загрузка удачна</div>';
+	 				$mes = array('mes' => 'Загрузка удачна', 'active' => 'true');
 	  		}
 
-				$sql = 'INSERT INTO news (picture, caption, description, date) VALUES(:picture, :caption, :description, :date)'; 
+				$sql = 'INSERT INTO news (picture, caption, description, date, category_id) VALUES(:picture, :caption, :description, :date, :category_id)'; 
 				$picture = 'img/'.$_FILES['picture']['name'];
 
 				$data = $db->prepare($sql);
@@ -126,22 +127,24 @@ function AddNews()
 				$data->bindParam(':caption', $caption, PDO::PARAM_STR);
 				$data->bindParam(':description', $description, PDO::PARAM_STR);
 				$data->bindParam(':date', $date);
+				$data->bindParam(':category_id', $categoryID);
 				$res = $data->execute();
   		} else {
-  			$sql = 'INSERT INTO news (caption, description, date) VALUES(:caption, :description, :date)';
+  			$sql = 'INSERT INTO news (caption, description, date, category_id) VALUES(:caption, :description, :date, :category_id)';
 				$picture = 'img/'.$_FILES['picture']['name'];
 
 				$data = $db->prepare($sql);
 				$data->bindParam(':caption', $caption, PDO::PARAM_STR);
 				$data->bindParam(':description', $description, PDO::PARAM_STR);
 				$data->bindParam(':date', $date);
+				$data->bindParam(':category_id', $categoryID);
 				$res = $data->execute();	
   		}
 
   		if ($res) {
-				return '<div class="alert alert-success" role="alert">Вы успешно отправили данные!</div>';
+  			return array('mes' => 'Вы успешно отправили данные!', 'active' => 'true');
 			} else {
-				return '<div class="alert alert-danger" role="alert">Ошибка!</div>';
+				return array('mes' => 'Ошибка!', 'active' => 'false');
 			}
 		}	
 	}
