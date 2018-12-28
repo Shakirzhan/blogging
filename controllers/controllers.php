@@ -11,11 +11,8 @@ function displayEntries()
 
 function outputOneNews()
 {
-	if (isset($_GET['item'])) {
-		$item = $_GET['item'];
-	} else {
-		$item = 1;	
-	}
+	if (isset($_GET['item'])) { $item = $_GET['item']; } 
+	else { $item = 1; }
 	$res = getOneNews($item);
 	$categories = getCategoriesList();
 	displayTheTemplate('item', $res, $categories);
@@ -39,6 +36,16 @@ function addForm()
 	$res = array();
 	$res = AddNews();
 	displayTheTemplate('append', $res, $categories);
+}
+
+function editForm()
+{
+	if (isset($_GET['itemID'])) { $item = $_GET['itemID']; } 
+	else { $item = 1; }
+	$resNews = getOneNews($item);
+	$categories = getCategoriesList();
+	$res = editNews($item);
+	newParameterConnectTemplate('edit', $res, $resNews, $categories);
 }
 
 function showNewsByCategory()

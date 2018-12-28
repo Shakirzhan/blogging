@@ -38,6 +38,9 @@ switch ($uri) {
 				session_destroy();
 				header("location: ../");
 				break;
+			case 'edit':
+				editForm();
+				break;
 			case 'append':
 				addForm();
 				break;

@@ -10,8 +10,21 @@ function connectionToTheDatabase()
 
 	return $connect;
 }
-
+/**
+ * Функция подключает шаблон
+ * @param  [string]  $folder [- это название папки]
+ * @param  [array]   $res    [здесь хранятся данные новостей]
+ * @param  [array]   $data   [здесь хранятся данные о катигориях]
+ * @return [boolean]         [true]
+ */
 function displayTheTemplate($folder, $res, $data)
+{
+	$template = ROOT.'/views/'.$folder.'/view.php';
+	include_once($template);
+	return true;
+}
+
+function newParameterConnectTemplate($folder, $res, $resNews, $data)
 {
 	$template = ROOT.'/views/'.$folder.'/view.php';
 	include_once($template);
@@ -24,13 +37,24 @@ function displayTheTemplateNewParameter($folder, $res, $data, $categories, $cate
 	include_once($template);
 	return true;
 }
-
+/**
+ * Это функция отвечате за постраничную навигацию
+ * @return [array] [description]
+ */
 function getPaginationData()
 {
+	/**
+	 * [$perpage выводить две записи на страницу]
+	 * @var integer
+	 */
 	$perpage = 2;
 	if (isset($_GET['page']) & !empty($_GET['page'])) {
 		$curpage = $_GET['page'];
 	} else {
+		/**
+		 * [$curpage текущая страница]
+		 * @var integer
+		 */
 		$curpage = 1;
 	}
 

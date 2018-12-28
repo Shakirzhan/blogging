@@ -35,6 +35,11 @@
                                                 <li><a href="#"><i class="fa fa-tag"></i>Creative</a></li>
                                                 <li><a href="#"><i class="fa fa-heart"></i>32 Love</a></li>
                                                 <li><a href="#"><i class="fa fa-comments"></i>3 Comments</a></li>
+                                                <?php if (isset($_SESSION['session_username'])): ?>
+                                                    <?php if ($item->author == $_SESSION['session_username']): ?>
+                                                        <li><a href="?action=edit&amp;itemID=<?=$item->id ?>"><i class="fa fa-tag"></i>Редактировать новость</a></li>
+                                                    <?php endif; ?>
+                                                <?php endif; ?>
                                             </ul>
                                         </div>
                                     </div>

@@ -16,7 +16,7 @@
 			      	<div class="alert alert-success" role="alert"><?=$res['mes'] ?></div>
 			      <?php endif; ?>
 
-			      <form name="contact-form" method="post" action="./?action=append" enctype="multipart/form-data">
+			      <form name="contact-form" method="post" action="<?=$_SERVER['REQUEST_URI'] ?>" enctype="multipart/form-data">
 			      		<div class="form-group">
 			      			<input type="file" name="picture">
 			      		</div>
