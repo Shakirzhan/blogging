@@ -45,7 +45,12 @@
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="../">Home</a></li>  
                         <li><a href="?action=registration">Registration</a></li>
-                        <li><a href="?action=login">Login</a></li>                 
+                        <li><a href="?action=login">Login</a></li> 
+                        <?php if (isset($_SESSION['session_username'])) { ?>
+                            <?php if ($_SESSION['session_username'] == 'admin'): ?>
+                                <li><a href="/admin/">Admin</a></li>       
+                            <?php endif; ?>
+                        <?php } ?>
                     </ul>
                 </div>
                 <div class="search">

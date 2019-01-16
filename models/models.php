@@ -2,8 +2,23 @@
 
 function getAllRecords($start, $perpage)
 {
+	$activism = 'Y';
 	$db = connectionToTheDatabase();
-	$sql = 'SELECT * FROM news LIMIT :start, :perpage';
+	$sql = 'SELECT * FROM news WHERE activism = :activism ORDER BY id DESC LIMIT :start, :perpage ';
+	$statement = $db->prepare($sql);
+	$statement->bindParam(':start', $start, PDO::PARAM_INT);
+	$statement->bindParam(':perpage', $perpage, PDO::PARAM_INT);
+	$statement->bindParam(':activism', $activism, PDO::PARAM_STR);
+	$statement->execute();
+	$data = $statement->fetchAll(PDO::FETCH_CLASS);
+	if (!empty($data)) return $data;
+	else return showTemplate("На этой странице нету контента...", "message_2", true);
+}
+
+function giveTheListOfNews()
+{
+	$db = connectionToTheDatabase();
+	$sql = 'SELECT * FROM news ORDER BY id DESC';
 	$statement = $db->prepare($sql);
 	$statement->bindParam(':start', $start, PDO::PARAM_INT);
 	$statement->bindParam(':perpage', $perpage, PDO::PARAM_INT);
@@ -94,6 +109,7 @@ function AddNews()
 			$description = $_POST['description'];
 			$date = $_POST['date'];
 			$categoryID = $_POST['categories'];
+			$activism = 'Y';
 
 			if (!empty($_FILES['picture']['name'])) {
 				$path = 'img/';
@@ -120,7 +136,7 @@ function AddNews()
 	 				$mes = 'Загрузка удачна';
 	  		}
 
-				$sql = 'INSERT INTO news (picture, caption, description, date, category_id, author) VALUES(:picture, :caption, :description, :date, :category_id, :author)'; 
+				$sql = 'INSERT INTO news (picture, caption, description, date, category_id, author, activism) VALUES(:picture, :caption, :description, :date, :category_id, :author, activism)'; 
 				$picture = 'img/'.$_FILES['picture']['name'];
 
 				$data = $db->prepare($sql);
@@ -130,9 +146,10 @@ function AddNews()
 				$data->bindParam(':date', $date);
 				$data->bindParam(':category_id', $categoryID);
 				$data->bindParam(':author', $author);
+				$data->bindParam(':activism', $activism);
 				$res = $data->execute();
   		} else {
-  			$sql = 'INSERT INTO news (caption, description, date, category_id, author) VALUES(:caption, :description, :date, :category_id, :author)';
+  			$sql = 'INSERT INTO news (caption, description, date, category_id, author, activism) VALUES(:caption, :description, :date, :category_id, :author, :activism)';
 				$picture = 'img/'.$_FILES['picture']['name'];
 
 				$data = $db->prepare($sql);
@@ -141,6 +158,7 @@ function AddNews()
 				$data->bindParam(':date', $date);
 				$data->bindParam(':category_id', $categoryID);
 				$data->bindParam(':author', $author);
+				$data->bindParam(':activism', $activism);
 				$res = $data->execute();	
   		}
 
@@ -176,32 +194,46 @@ function getCategoriesList()
 function getNewsUnderCategories($start, $perpage, $category_id)
 {
 	$db = connectionToTheDatabase();
-	$sql = 'SELECT * FROM news WHERE category_id = :category_id LIMIT :start, :perpage';
+	$activism = 'Y';
+	$sql = 'SELECT * FROM news WHERE category_id = :category_id AND activism = :activism ORDER BY id DESC LIMIT :start, :perpage';
 	$statement = $db->prepare($sql);
 	$statement->bindParam(':start', $start, PDO::PARAM_INT);
 	$statement->bindParam(':perpage', $perpage, PDO::PARAM_INT);
 	$statement->bindParam(':category_id', $category_id, PDO::PARAM_INT);
+	$statement->bindParam(':activism', $activism, PDO::PARAM_STR);
 	$statement->execute();
 	$data = $statement->fetchAll(PDO::FETCH_CLASS);
-	if (isset($data)) return $data;
+	if (!empty($data)) return $data;
+	else return showTemplate("На этой странице нету контента...", "message_2", true);
 }
 
 function editNews($id)
 {
 	$db = connectionToTheDatabase();
+	$uri = $_SERVER['REQUEST_URI'];
+	$uri = substr($uri, 1, 5);
 	if (isset($_POST['save'])) {
 		if (!empty($_POST['caption']) && !empty($_POST['description']) && !empty($_POST['date'])) {
+			
+			$id = $_POST['id'];
 			$caption = $_POST['caption'];
 			$description = $_POST['description'];
 			$date = $_POST['date'];
 			$categoryID = $_POST['categories'];
+			$activism = !empty($_POST['activism']) ? $_POST['activism'] : 'N';
 			
+		
 			if (!empty($_FILES['picture']['name'])) {
 				$path = 'img/';
 				$tmp_path = 'tmp/';
 				$types = array('image/gif', 'image/png', 'image/jpeg');
 				$size = 1024000; // 1024000
-
+				
+				$uri = $_SERVER['REQUEST_URI'];
+				$uri = substr($uri, 1, 5);
+				if ($uri == 'admin') {
+					$path = '../img/';	
+				}
 
 				$names = explode('.', $_FILES['picture']['name']);
 				$ext = array_pop($names);
@@ -221,7 +253,7 @@ function editNews($id)
 	 				$mes = 'Загрузка удачна';
 	  		}
 
-				$sql = 'UPDATE news SET picture = :picture, caption = :caption, description = :description, date = :date, category_id = :category_id WHERE id = :id';
+				$sql = 'UPDATE news SET picture = :picture, caption = :caption, description = :description, date = :date, category_id = :category_id, activism = :activism WHERE id = :id';
 				$picture = 'img/'.$_FILES['picture']['name'];
 
 				$data = $db->prepare($sql);
@@ -231,12 +263,14 @@ function editNews($id)
 				$data->bindParam(':date', $date);
 				$data->bindParam(':id', $id, PDO::PARAM_INT);
 				$data->bindParam(':category_id', $categoryID);
+				$data->bindParam(':activism', $activism, PDO::PARAM_STR);
 				$res = $data->execute();
   		} else {
-  			$sql = 'UPDATE news SET caption = :caption, description = :description, date = :date, category_id = :category_id WHERE id = :id';
+  			$sql = 'UPDATE news SET activism = :activism, caption = :caption, description = :description, date = :date, category_id = :category_id  WHERE id = :id';
 				$picture = 'img/'.$_FILES['picture']['name'];
 
 				$data = $db->prepare($sql);
+				$data->bindParam(':activism', $activism, PDO::PARAM_STR);
 				$data->bindParam(':caption', $caption, PDO::PARAM_STR);
 				$data->bindParam(':description', $description, PDO::PARAM_STR);
 				$data->bindParam(':date', $date);
@@ -249,9 +283,21 @@ function editNews($id)
 
 			if ($res) {
 				if (empty($mes)) {
+					if ($uri == 'admin') {
+						header("location: /admin/");
+					} else {
+						header("location: /");
+					}
 					return array('mes' => 'Вы успешно отправили данные!', 'active' => 'true');
+				} else {
+					if ($uri == 'admin') {
+						header("location: /admin/");
+					} else {
+						header("location: /");
+					}
+					return array('mes' => 'Вы успешно отправили данные!', 'active' => 'true', 'mes_second' => $mes);	
 				}
-				return array('mes' => 'Вы успешно отправили данные!', 'active' => 'true', 'mes_second' => $mes);
+				
 			} else {
 				return array('mes' => 'Ошибка!', 'active' => 'false');
 			}
@@ -259,15 +305,45 @@ function editNews($id)
 	}
 
 	if (isset($_POST['cancellation'])) {
+		$uri = $_SERVER['REQUEST_URI'];
+		$uri = substr($uri, 1, 5);
+		if ($uri == 'admin') {
+			header("location: /admin/");
+			return true;
+		}
 		header("location: ../");
 	}
 
 	if (isset($_POST['delete'])) {
+		$uri = $_SERVER['REQUEST_URI'];
+		$uri = substr($uri, 1, 5);
 		$data = $db->prepare('DELETE FROM news WHERE id = :id');
   	$data->bindParam(':id', $id);
   	$res = $data->execute();	
   	if ($res) {
-  		header("location: ../");	
+  		
+				if (array_key_exists('delete_file', $_POST)) {
+				  $filename = $_POST['delete_file'];
+				  if (file_exists($filename)) {
+				    unlink($filename);
+				    if ($uri == 'admin') {
+							header("location: /admin/");
+						} else {
+							header("location: /");
+						}
+				    //echo 'File '.$filename.' has been deleted';
+				  } else {
+				  	if ($uri == 'admin') {
+							header("location: /admin/");
+						} else {
+							header("location: /");
+						}
+				    //echo 'Could not delete '.$filename.', file does not exist';
+				  }
+				}
+				return true;
+
+  		header("location: /");	
   	}
 	} 
 }

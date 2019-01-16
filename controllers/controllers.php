@@ -4,7 +4,13 @@ function displayEntries()
 {
 	$categories = getCategoriesList();
 	$data = getPaginationData();
-	$data['page'] = true;
+
+	$action = getAction();
+	$count = countingRecords($action);
+
+	$data['page'] = false;
+	if ($count > 2) { $data['page'] = true; }
+	
 	$res = getAllRecords($data['start'], $data['perpage']);
 	displayTheTemplateNewParameter('blogging', $res, $data, $categories, array());
 }
@@ -53,7 +59,32 @@ function showNewsByCategory()
 	$categoryID = isset($_GET['categoryID']) ? $_GET['categoryID'] : '';
 	$categories = getCategoriesList();
 	$data = getPaginationDataNewParameter($categoryID);
-	$data['category'] = true;
+	
+
+
+	$action = getAction();
+	$count = countingRecords($action, $categoryID);
+
+
+	$data['category'] = false;
+	if ($count > 2) { $data['category'] = true; }
+
 	$res = getNewsUnderCategories($data['start'], $data['perpage'], $categoryID);
+
 	displayTheTemplateNewParameter('blogging', $res, $data, $categories, $categoryID);
+}
+
+function displayNewsList() 
+{
+	$res = giveTheListOfNews();
+	displayTheTemplateAdmin('list', $res, array());
+}
+
+function editFormAdmin() 
+{
+	$item = (!empty($_GET['itemID'])) ? $_GET['itemID'] : '';
+	$resNews = getOneNews($item);
+	$categories = getCategoriesList();
+	$res = editNews($item);
+	newParameterConnectTemplateAdmin('edit', $res, $resNews, $categories);
 }

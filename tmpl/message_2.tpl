@@ -1,0 +1,1 @@
+<p class="alert alert-danger" style="font-family: Arial; margin: 0 15px;">$message$</p>

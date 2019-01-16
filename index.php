@@ -49,7 +49,8 @@ switch ($uri) {
 				break;
 			
 			default:
-				# code...
+				http_response_code(404);
+				displayTheTemplate('404', array(), array());
 				break;
 		}
 		break;

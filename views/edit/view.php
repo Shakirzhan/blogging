@@ -1,3 +1,4 @@
+
 <?php if (isset($_SESSION['session_username'])): ?>
 	<?php if ($resNews['author'] == $_SESSION['session_username']) { ?>
 		<?php require_once(ROOT.'/views/layouts/header.php'); ?>    
@@ -21,6 +22,9 @@
 						      <?php endif; ?>
 						    <?php endif; ?>
 					      <form name="contact-form" method="post" action="<?=$_SERVER['REQUEST_URI'] ?>" enctype="multipart/form-data">
+					      		<input class="newsId" type="text" name="id" id="newsId"value="<?=$resNews['id'] ?>" hidden>
+					      		<input type="hidden" value="<?=$resNews['picture'] ?>" name="delete_file" />
+					      		<input class="activity" type="hidden" name="activism" value="Y">
 					      		<div class="form-group">
 					      			<input type="file" name="picture">
 					      		</div>

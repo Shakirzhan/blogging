@@ -31,12 +31,68 @@ function newParameterConnectTemplate($folder, $res, $resNews, $data)
 	return true;
 }
 
+function newParameterConnectTemplateAdmin($folder, $res, $resNews, $data)
+{
+	$template = '../views/admin/'.$folder.'/view.php';
+	include_once($template);
+	return true;
+}
+
 function displayTheTemplateNewParameter($folder, $res, $data, $categories, $categoryID)
 {
 	$template = ROOT.'/views/'.$folder.'/view.php';
 	include_once($template);
 	return true;
 }
+
+function displayTheTemplateAdmin($folder, $res, $data)
+{
+	$template = '../views/admin/'.$folder.'/view.php';
+	include_once($template);
+	return true;
+}
+
+function getAction() {
+	return $action = (isset($_GET['action'])) ? $_GET['action'] : '';
+}
+
+function countingRecords($action, $categoryID = null) {
+	$db = connectionToTheDatabase();
+	switch ($action) {
+		default:
+		case 'page':
+			$PageSql = 'SELECT COUNT(*) as count FROM news';
+			$statement = $db->prepare($PageSql);
+			$statement->setFetchMode(PDO::FETCH_ASSOC);
+			$statement->execute();
+			$row = $statement->fetch();
+			return $row['count'];
+			break;
+		case 'category':
+			$PageSql = 'SELECT COUNT(*) as count FROM news WHERE category_id = :category_id';
+			$statement = $db->prepare($PageSql);
+			$statement->bindParam(':category_id', $categoryID, PDO::PARAM_INT);
+			$statement->setFetchMode(PDO::FETCH_ASSOC);
+			$statement->execute();
+			$row = $statement->fetch();
+			return $row['count'];
+			break;
+	}
+}
+
+function getTotalRecords($categoryID) {
+	$db = connectionToTheDatabase();
+	$activism = 'Y';
+	$PageSql = 'SELECT COUNT(*) as count FROM news WHERE category_id = :category_id AND activism = :activism';
+	$statement = $db->prepare($PageSql);
+	$statement->bindParam(':category_id', $categoryID, PDO::PARAM_INT);
+	$statement->bindParam(':activism', $activism, PDO::PARAM_STR);
+	$statement->setFetchMode(PDO::FETCH_ASSOC);
+	$statement->execute();
+	$row = $statement->fetch();
+	return $row['count'];	
+}
+
 /**
  * Это функция отвечате за постраничную навигацию
  * @return [array] [description]
@@ -52,7 +108,7 @@ function getPaginationData()
 		$curpage = $_GET['page'];
 	} else {
 		/**
-		 * [$curpage текущая страница]
+		 * [$curpage номер текущей страницы]
 		 * @var integer
 		 */
 		$curpage = 1;
@@ -69,17 +125,14 @@ function getPaginationData()
 	$nextpage = $curpage + 1;
 	$previouspage = $curpage - 1;
 
-	$data = array();
-
-	$data['start'] = $start;
-	$data['perpage'] = $perpage;
-	$data['curpage'] = $curpage;
-	$data['startpage'] = $startpage;
-	$data['previouspage'] = $previouspage;
-	$data['endpage'] = $endpage;
-	$data['nextpage'] = $nextpage;
-
-	return $data;
+	return array('start' => $start,
+							 'perpage' => $perpage, 
+							 'curpage' => $curpage,
+							 'startpage' => $startpage,
+							 'previouspage' => $previouspage,
+							 'endpage' => $endpage,
+							 'nextpage' => $nextpage,
+	);
 }
 
 function getPaginationDataNewParameter($categoryID)
@@ -102,15 +155,38 @@ function getPaginationDataNewParameter($categoryID)
 	$nextpage = $curpage + 1;
 	$previouspage = $curpage - 1;
 
-	$data = array();
+	return array('start' => $start,
+							 'perpage' => $perpage, 
+							 'curpage' => $curpage,
+							 'startpage' => $startpage,
+							 'previouspage' => $previouspage,
+							 'endpage' => $endpage,
+							 'nextpage' => $nextpage,
+	);
+}
 
-	$data['start'] = $start;
-	$data['perpage'] = $perpage;
-	$data['curpage'] = $curpage;
-	$data['startpage'] = $startpage;
-	$data['previouspage'] = $previouspage;
-	$data['endpage'] = $endpage;
-	$data['nextpage'] = $nextpage;
+function getMessage($name, $resolution = false) {
+	ob_start(); // Начинаем сохрание выходных данных в буфер
+	if ($resolution) { include ('tmpl/'.$name.".tpl"); } // Отправляем в буфер содержимое файла 
+  else { include ('../tmpl/'.$name.".tpl"); } // Отправляем в буфер содержимое файла 
+  $text = ob_get_clean(); // Очищаем буфер и возвращаем содержимое
+  return $text; // Возвращение текста из файла
+}
 
-	return $data;
+function showTemplate($message, $messageTemplate, $resolution = false) {
+	$output = str_replace(
+      array(
+        '$message$'
+      ),
+      array (
+        $message
+      ),
+      getMessage($messageTemplate, $resolution)
+  );
+
+  return $output;
+}
+
+function debug($data) {
+	echo '<pre>'.print_r($data, 1).'</pre>';
 }
