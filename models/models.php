@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * [getAllRecords получение из бд две записи]
+ * @param  [type] $start   [начальная страница]
+ * @param  [type] $perpage [текущая страница]
+ * @return [array]          [две записи]
+ */
 function getAllRecords($start, $perpage)
 {
 	$activism = 'Y';
@@ -14,7 +19,10 @@ function getAllRecords($start, $perpage)
 	if (!empty($data)) return $data;
 	else return showTemplate("На этой странице нету контента...", "message_2", true);
 }
-
+/**
+ * [giveTheListOfNews получение всех записей]
+ * @return [array] [description]
+ */
 function giveTheListOfNews()
 {
 	$db = connectionToTheDatabase();
@@ -26,7 +34,11 @@ function giveTheListOfNews()
 	$data = $statement->fetchAll(PDO::FETCH_CLASS);
 	if (isset($data)) return $data;
 }
-
+/**
+ * [getOneNews получение одной записи]
+ * @param  [string] $id [номер новости]
+ * @return [array]     [новость]
+ */
 function getOneNews($id)
 {
 	$db = connectionToTheDatabase();
@@ -36,7 +48,10 @@ function getOneNews($id)
 	$statement->execute();
 	return $statement->fetch(PDO::FETCH_ASSOC);
 }
-
+/**
+ * [weGetNewUser добавление нового пользователя]
+ * @return [string] [сообщение к пользователю]
+ */
 function weGetNewUser()
 {
 	$db = connectionToTheDatabase();
@@ -67,7 +82,10 @@ function weGetNewUser()
 		}
 	}
 }
-
+/**
+ * [singleUserRegistration вход пользователя]
+ * @return [string] [description]
+ */
 function singleUserRegistration()
 {
 	$db = connectionToTheDatabase();
@@ -98,7 +116,9 @@ function singleUserRegistration()
 		}
 	}
 }
-
+/**
+ * [AddNews добавление новости]
+ */
 function AddNews()
 {
 	$db = connectionToTheDatabase();
@@ -173,7 +193,10 @@ function AddNews()
 		}	
 	}
 }
-
+/**
+ * [getCategoriesList список категорий]
+ * @return [array] [категории]
+ */
 function getCategoriesList()
 {
 	$db = connectionToTheDatabase();
@@ -190,7 +213,13 @@ function getCategoriesList()
 
   return $categoryList;
 }
-
+/**
+ * [getNewsUnderCategories выводит все новости по категории]
+ * @param  [type] $start       [description]
+ * @param  [type] $perpage     [description]
+ * @param  [string] $category_id [description]
+ * @return [array]  
+ */
 function getNewsUnderCategories($start, $perpage, $category_id)
 {
 	$db = connectionToTheDatabase();
@@ -206,7 +235,11 @@ function getNewsUnderCategories($start, $perpage, $category_id)
 	if (!empty($data)) return $data;
 	else return showTemplate("На этой странице нету контента...", "message_2", true);
 }
-
+/**
+ * [editNews редактирование новости]
+ * @param  [string] $id [номер новости]
+ * @return [arrau]     [description]
+ */
 function editNews($id)
 {
 	$db = connectionToTheDatabase();

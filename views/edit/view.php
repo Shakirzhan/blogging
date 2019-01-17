@@ -8,7 +8,7 @@
 			<div class="container">
 				<div class="col-md-12 col-sm-12">
 					  <div class="contact-form bottom">
-					      <h2>Добавить новость</h2>
+					      <h2>Изменить новость</h2>
 					      <?php if (isset($res['active'])): ?>
 						      <?php if (isset($res) && $res['active'] == 'false'): ?>
 						      	<div class="alert alert-danger" role="alert"><?=$res['mes'] ?></div>
