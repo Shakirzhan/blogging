@@ -20,7 +20,7 @@
 			      <form id="form-news" name="contact-form" method="post" action="<?=$_SERVER['REQUEST_URI'] ?>" enctype="multipart/form-data">
 
 			          	<input class="newsId" type="text" name="id" id="newsId"value="<?=$resNews['id'] ?>" hidden>
-			          	<input type="hidden" value="../<?=$resNews['picture'] ?>" name="delete_file" />
+			          	<input type="hidden" value="<?=(!empty($resNews['picture'])) ? '../'.$resNews['picture'] : false; ?>" name="delete_file" />
 
 			      		<div class="form-group">
 			      			<label class="lab">

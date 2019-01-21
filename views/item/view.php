@@ -30,8 +30,10 @@
                                     <div class="post-bottom overflow">
                                         <ul class="nav navbar-nav post-nav">
                                             <li><a href="#"><i class="fa fa-tag"></i>Creative</a></li>
+                                            <!--
                                             <li><a href="#"><i class="fa fa-heart"></i>32 Love</a></li>
                                             <li><a href="#"><i class="fa fa-comments"></i>3 Comments</a></li>
+                                            -->
                                         </ul>
                                     </div>
                                     <div class="blog-share">

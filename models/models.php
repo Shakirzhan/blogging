@@ -141,7 +141,8 @@ function AddNews()
 				$names = explode('.', $_FILES['picture']['name']);
 				$ext = array_pop($names);
 	  		$_FILES['picture']['name'] = date('d.m.Y').'.'.time().'.'.$ext;
-	  		
+	  		$picture = 'img/'.$_FILES['picture']['name'];
+
 	  		if (!in_array($_FILES['picture']['type'], $types)) {
 	  			return array('mes' => 'Запрещённый тип файла.', 'active' => 'false');
 	  		}
@@ -156,8 +157,8 @@ function AddNews()
 	 				$mes = 'Загрузка удачна';
 	  		}
 
-				$sql = 'INSERT INTO news (picture, caption, description, date, category_id, author, activism) VALUES(:picture, :caption, :description, :date, :category_id, :author, activism)'; 
-				$picture = 'img/'.$_FILES['picture']['name'];
+				$sql = 'INSERT INTO news (picture, caption, description, date, category_id, author, activism) VALUES(:picture, :caption, :description, :date, :category_id, :author, :activism)'; 
+				
 
 				$data = $db->prepare($sql);
 				$data->bindParam(':picture', $picture, PDO::PARAM_STR);
@@ -344,7 +345,7 @@ function editNews($id)
 			header("location: /admin/");
 			return true;
 		}
-		header("location: ../");
+		header("location: /");
 	}
 
 	if (isset($_POST['delete'])) {
@@ -357,8 +358,10 @@ function editNews($id)
   		
 				if (array_key_exists('delete_file', $_POST)) {
 				  $filename = $_POST['delete_file'];
+				 
 				  if (file_exists($filename)) {
 				    unlink($filename);
+				
 				    if ($uri == 'admin') {
 							header("location: /admin/");
 						} else {
